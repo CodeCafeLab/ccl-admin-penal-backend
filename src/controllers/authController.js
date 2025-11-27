@@ -2,8 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 // Fixed admin credentials
-const ADMIN_EMAIL = "antima142005@gmail.com";
-const ADMIN_PASSWORD = "Antu@2252";
+const ADMIN_EMAIL = "codecafelabdev@gmail.com";
+const ADMIN_PASSWORD = "CodeCafeLab@1431";
 const ADMIN_NAME = "Admin";
 
 exports.login = async (req, res) => {

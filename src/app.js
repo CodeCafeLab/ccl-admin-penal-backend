@@ -32,25 +32,39 @@ const partnerRoutes = require("./routes/partnerRoutes");
 
 const app = express();
 
-// Allowed origins
+// Allowed origins - supports both local development and production domains
 const allowedOrigins = [
-  "http://localhost:3001",
+  // Local development
   "http://localhost:3000",
-  "https://6000-firebase-studio-1747976034162.cluster-44kx2eiocbhe2tyk3zoyo3ryuo.cloudworkstations.dev",
+  "http://localhost:3001",
+  // Production domains
   "https://admin.codecafelab.in",
+  "https://www.admin.codecafelab.in",
+  "https://adminb.codecafelab.in",
+  "https://www.adminb.codecafelab.in",
   "https://codecafelab.in",
+  "https://www.codecafelab.in",
+  // Development cloud environments
+  "https://6000-firebase-studio-1747976034162.cluster-44kx2eiocbhe2tyk3zoyo3ryuo.cloudworkstations.dev",
 ];
 
-// CORS origin checker
+// CORS origin checker - supports both local and server domains
 const isAllowedOrigin = (origin) => {
-  if (!origin) return true; // allow curl/postman
+  if (!origin) return true; // allow curl/postman/direct API calls
+  
   const normalizedOrigin = origin.replace(/\/$/, "").toLowerCase();
-  return (
-    normalizedOrigin.startsWith("http://localhost:") ||
-    allowedOrigins.some((allowed) => {
-      return normalizedOrigin === allowed.replace(/\/$/, "").toLowerCase();
-    })
-  );
+  
+  // Allow all localhost ports for development
+  if (normalizedOrigin.startsWith("http://localhost:") || 
+      normalizedOrigin.startsWith("http://127.0.0.1:")) {
+    return true;
+  }
+  
+  // Check against allowed origins list
+  return allowedOrigins.some((allowed) => {
+    const normalizedAllowed = allowed.replace(/\/$/, "").toLowerCase();
+    return normalizedOrigin === normalizedAllowed;
+  });
 };
 
 // Configure CORS with proper preflight handling
